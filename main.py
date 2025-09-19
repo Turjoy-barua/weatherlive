@@ -1,5 +1,7 @@
 from fetch import fetch_from_api
 import datetime
+import time
+import os 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
     
@@ -8,12 +10,13 @@ def user_interface():
     print('''========================================
         WEATHER ANALYZER - NSI
 ========================================
-1. Current weather of a city
-2. View saved weather history
-3. Analyze weather trends
-4. Visualize data with graphs
-5. Exit''')
-user_interface()
+1. Current weather of a city  -> current
+2. View saved weather history -> history
+3. Analyze weather trends     -> trend
+4. Visualize data with graphs -> graph
+5. Exit                       -> exit
+''')
+
     
     
     
@@ -39,3 +42,14 @@ def current_weather():
     print(f"🌧️ Rain        : {rain_mm} mm\n")
     
     # print("Data successfully saved to database ✅")
+
+
+#whole running function for the whole systeme
+running = True
+while running:
+    user = input()
+    if user.lower() == "exit":
+        running = False
+    #elif user.lower() == "help":
+    os.system('cls' if os.name == 'nt' else 'clear') # this function is used to clear the screen of the terminal 
+    
