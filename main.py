@@ -22,7 +22,7 @@ def history():
     for row in data:
         print(f"date : {row[1]}\tlocation : {row[2]}\ttemp : {row[3]}\tfeels_like : {row[4]}\thumidity : {row[5]}\twind : {row[6]}\train : {row[7]}")
     return 
-  
+
 def current_weather():
     location = (input("Enter your city : "))
     weather_data = fetch.fetch_from_api(location)
@@ -48,7 +48,6 @@ def current_weather():
 
 
 #whole running function for the whole systeme
-
 running = True
 user_interface()
 while running:
