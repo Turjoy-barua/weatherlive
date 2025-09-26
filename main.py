@@ -1,10 +1,10 @@
-from fetch import fetch_from_api
+import fetch
 import datetime
-import time
+#import time
 import os 
+import database
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
-    
 
 def user_interface():
     print('''========================================
@@ -17,39 +17,49 @@ def user_interface():
 5. Exit                       -> exit
 ''')
 
-    
-    
-    
-    
+def history():
+    data =  database.read_data()
+    for row in data:
+        print(f"date : {row[1]}\tlocation : {row[2]}\ttemp : {row[3]}\tfeels_like : {row[4]}\thumidity : {row[5]}\twind : {row[6]}\train : {row[7]}")
+    return 
+  
 def current_weather():
-    weather_data = fetch_from_api()
+    location = (input("Enter your city : "))
+    weather_data = fetch.fetch_from_api(location)
     temp = kel_to_c(weather_data.get("temp"))
     fl = kel_to_c(weather_data.get("feels_like"))
     humidity = weather_data.get("humidity")
     wind_speed = weather_data.get("wind_speed")
     rain_mm = weather_data.get("rain", {}).get("1h", 0) 
     date = datetime.datetime.fromtimestamp(weather_data.get("dt")).strftime('%Y-%m-%d %H:%M:%S')
+    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
     print("===============================")
     print("   Current Weather Report")
     print("===============================\n")
     
-    print(f"📍 Location: paris")
+    print(f"📍 Location: {location.upper()}")
     print(f"📅 Date: {date}\n")
     print(f"🌡️ Temperature : {temp} °C")
     print(f"🌡️ Feels like : {fl} °C")
     print(f"💧 Humidity    : {humidity} %")
     print(f"🌬️ Wind Speed  : {wind_speed} km/h")
     print(f"🌧️ Rain        : {rain_mm} mm\n")
-    
-    # print("Data successfully saved to database ✅")
+    print("Data successfully saved to database ✅")
 
 
 #whole running function for the whole systeme
+
 running = True
+user_interface()
 while running:
-    user = input()
-    if user.lower() == "exit":
+    user = (input("--> "))
+    os.system('cls' if os.name == 'nt' else 'clear') # this function is used to clear the screen of the terminal
+    print(user)
+    if user == "help":
+        user_interface()
+    elif user == "exit":
         running = False
-    #elif user.lower() == "help":
-    os.system('cls' if os.name == 'nt' else 'clear') # this function is used to clear the screen of the terminal 
-    
+    elif user == "current":
+        current_weather()
+    elif user == "history":
+        history()
