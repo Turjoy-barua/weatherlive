@@ -13,9 +13,9 @@ def user_interface():
 1. Current weather of a city  -> current
 2. View saved weather history -> history
 3. Analyze weather trends     -> trend
-4. Visualize data with graphs -> graph
+4. Visualize data with graphs -> graph 
 5. Exit                       -> exit
-''')
+''') # --> should erase the 4th option
 
 def history():
     data =  database.read_data()
@@ -46,7 +46,8 @@ def current_weather():
     print(f"🌧️ Rain        : {rain_mm} mm\n")
     print("Data successfully saved to database ✅")
 
-
+def trend(num_of_days, type_of_trend):
+    pass
 #whole running function for the whole systeme
 running = True
 user_interface()

@@ -1,8 +1,8 @@
 import fetch
 import datetime 
 import matplotlib.pyplot as plt
-import numpy as np
-plt.style.use('_mpl-gallery')
+
+
 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
@@ -11,57 +11,80 @@ def date():
     
     pass
 
-def temp_trend():
+
+def temp_trend(num_of_days):
     temp = []
     feels_like = []
-    humidity = []
     date = []
     today = datetime.datetime.now()
     day = today.day
-    while day >= (today.day - 20):
+    while day >= (today.day - num_of_days):
         data = fetch.fetch_24(today.year, today.month, day, "paris")
         date.append(day)
         temp.append(kel_to_c(data["data"][0]["temp"]))
         feels_like.append(kel_to_c(data["data"][0]["feels_like"]))
-        humidity.append(data["data"][0]["humidity"])
-        # rain = data["data"][0]["weather"] --> to be done
-        
+        #print(json.dumps(data, indent=2)) #--> gonna use to checks
         day-=1
     temp.reverse()
-    
-    print(date)
-    print(temp)
-    print(feels_like)
-    print(humidity)
-    """ plt.suptitle("Temperature trend of last 7 days")
+    feels_like.reverse()
+    # --> temp graph
+    plt.suptitle(f"Temperature trend of last {num_of_days} days")
     plt.xlabel("date")
     plt.ylabel("Temperature")
-    plt.plot(date,temp)
-    plt.show()    """     
+    plt.plot(date,temp, marker="o", color = "r")
+    # plt.plot(feels_like, marker='o', color = 'b')
+    plt.show()
+    return(temp, feels_like)
+    
+def humidity_trend(num_of_days):
+    humidity = []
+    date = []
+    today = datetime.datetime.now()
+    day = today.day
+    while day >= (today.day - num_of_days):
+        data = fetch.fetch_24(today.year, today.month, day, "paris")
+        date.append(day)
+        humidity.append(data["data"][0]["humidity"])
+        #print(json.dumps(data, indent=2)) # --> gonna use to checks
+        day-=1
+    humidity.reverse()
+    # --> humidity graph
+    plt.suptitle(f"Humidity of last {num_of_days} days")
+    plt.xlabel("date")
+    plt.ylabel("Temperature")
+    plt.plot(date, humidity, marker="o", color = "g")
+    plt.show()
+    return(humidity)
 
-temp_trend()
+
+def rain_trend(num_of_days):
+    rain = []
+    date = []
+    today = datetime.datetime.now()
+    day = today.day
+    while day >= (today.day - num_of_days):
+        data = fetch.fetch_24(today.year, today.month, day, "paris")
+        date.append(day)
+        rain_info = (data["data"][0].get("rain", 0))
+        if rain_info!=0 : 
+            quantity = (list(rain_info.values())[0]) 
+            rain.append(float(quantity))
+        else:
+            rain.append(0)
+        # print(json.dumps(data, indent=2)) # --> gonna use to checks
+        day-=1
+    rain.reverse()
+    # --> rain graph
+    plt.suptitle(f"Rain trend of last {num_of_days} days")
+    plt.xlabel("date")
+    plt.ylabel("Rain in mm")
+    plt.plot(date, rain, marker="o", color = "b")
+    plt.show()
+    return (rain)    
+    
+
+print(rain_trend(25))
 
 
 
 #--------------------------------------------------------#
-""" import matplotlib.pyplot as plt
-import numpy as np
-
-plt.style.use('_mpl-gallery')
-
-# make data
-x = np.arange(0, 10, 2)
-ay = [1, 1.25, 2, 2.75, 3]
-by = [1, 1, 1, 1, 1]
-cy = [2, 1, 2, 1, 2]
-y = np.vstack([ay, by, cy])
-
-# plot
-fig, ax = plt.subplots()
-
-ax.stackplot(x, y)
-
-ax.set(xlim=(0, 8), xticks=np.arange(1, 8),
-       ylim=(0, 8), yticks=np.arange(1, 8))
-
-plt.show() """
