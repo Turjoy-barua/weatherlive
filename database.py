@@ -27,6 +27,7 @@ def store_data(date, city, temp, feels_like, humidity, wind, rain):
                (date, city, temp, feels_like, humidity, wind, rain))
     conn.commit()
     conn.close()
+    print("Data successfully saved to database ✅")
     
 def read_data():
     conn = sqlite3.connect("database.db")

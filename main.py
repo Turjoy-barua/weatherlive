@@ -3,6 +3,7 @@ import datetime
 #import time
 import os 
 import database
+import visual
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
@@ -13,7 +14,7 @@ def user_interface():
 1. Current weather of a city  -> current
 2. View saved weather history -> history
 3. Analyze weather trends     -> trend
-4. Visualize data with graphs -> graph 
+4. Visualize data with graphs -> graph !!! don't works !!!
 5. Exit                       -> exit
 ''') # --> should erase the 4th option
 
@@ -32,11 +33,9 @@ def current_weather():
     wind_speed = weather_data.get("wind_speed")
     rain_mm = weather_data.get("rain", {}).get("1h", 0) 
     date = datetime.datetime.fromtimestamp(weather_data.get("dt")).strftime('%Y-%m-%d %H:%M:%S')
-    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
     print("===============================")
     print("   Current Weather Report")
-    print("===============================\n")
-    
+    print("===============================\n")    
     print(f"📍 Location: {location.upper()}")
     print(f"📅 Date: {date}\n")
     print(f"🌡️ Temperature : {temp} °C")
@@ -44,10 +43,20 @@ def current_weather():
     print(f"💧 Humidity    : {humidity} %")
     print(f"🌬️ Wind Speed  : {wind_speed} km/h")
     print(f"🌧️ Rain        : {rain_mm} mm\n")
-    print("Data successfully saved to database ✅")
+    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
+    
 
-def trend(num_of_days, type_of_trend):
-    pass
+def trend():
+    type_of_trend = (input("what trend you want? temp/humidity/rain\n")).lower()
+    num_of_days = int(input("of how many days?\n"))
+    if type_of_trend == "temp":
+        print(visual.temp_trend(num_of_days))
+    elif type_of_trend == "humidity":
+        print(visual.humidity_trend(num_of_days))
+    elif type_of_trend == "rain":
+        print(visual.rain_trend(num_of_days))
+        
+        
 #whole running function for the whole systeme
 running = True
 user_interface()
@@ -63,3 +72,5 @@ while running:
         current_weather()
     elif user == "history":
         history()
+    elif user == "trend":
+        trend()
