@@ -17,7 +17,7 @@ def date():
     
     
     return (day, month, year, total_days.days, days_before)    
-print(date())
+
 
 
 
