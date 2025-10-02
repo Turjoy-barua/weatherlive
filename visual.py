@@ -96,7 +96,7 @@ def rain_trend():
     plt.show()
     return (rain)    
     
-
+rain_trend()
 
 
 #--------------------------------------------------------#
