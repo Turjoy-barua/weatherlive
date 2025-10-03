@@ -4,6 +4,7 @@ import datetime
 import os 
 import database
 import visual
+
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
@@ -13,10 +14,10 @@ def user_interface():
 ========================================
 1. Current weather of a city  -> current
 2. View saved weather history -> history
-3. Analyze weather trends     -> trend
-4. Visualize data with graphs -> graph !!! don't works !!!
+3. Analyze weather trends     -> trend !! doesn't works !!
+4. Visualize data with graphs -> graph 
 5. Exit                       -> exit
-''') # --> should erase the 4th option
+''') # --> should erase the 3rd option
 
 def history():
     data =  database.read_data()
@@ -26,7 +27,7 @@ def history():
 
 def current_weather():
     location = (input("Enter your city : "))
-    weather_data = fetch.fetch_from_api(location)
+    weather_data, country = fetch.fetch_from_api(location)
     temp = kel_to_c(weather_data.get("temp"))
     fl = kel_to_c(weather_data.get("feels_like"))
     humidity = weather_data.get("humidity")
@@ -36,7 +37,7 @@ def current_weather():
     print("===============================")
     print("   Current Weather Report")
     print("===============================\n")    
-    print(f"📍 Location: {location.upper()}")
+    print(f"📍 Location: {location.upper()}, {country}")
     print(f"📅 Date: {date}\n")
     print(f"🌡️ Temperature : {temp} °C")
     print(f"🌡️ Feels like : {fl} °C")
@@ -46,15 +47,14 @@ def current_weather():
     database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
     
 
-def trend():
-    type_of_trend = (input("what trend you want? temp/humidity/rain\n")).lower()
-    num_of_days = int(input("of how many days?\n"))
+def graph():
+    type_of_trend = (input("what graph you want? temp/humidity/rain\n")).lower()
     if type_of_trend == "temp":
-        print(visual.temp_trend(num_of_days))
+        print(visual.temp_trend())
     elif type_of_trend == "humidity":
-        print(visual.humidity_trend(num_of_days))
+        print(visual.humidity_trend())
     elif type_of_trend == "rain":
-        print(visual.rain_trend(num_of_days))
+        print(visual.rain_trend())
         
         
 #whole running function for the whole systeme
@@ -73,4 +73,4 @@ while running:
     elif user == "history":
         history()
     elif user == "trend":
-        trend()
+        graph()

@@ -1,33 +1,44 @@
 import fetch
 import datetime 
 import matplotlib.pyplot as plt
-import historical
 import json
 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
 def date():
-    print("enter date: day/month/year\n ")
-    today = datetime.date.today()
-    day, month, year = (map(int, input("-->").split("/")))
-    start_date = datetime.date(year, month, day)
-    total_days = datetime.date(today.year, today.month, today.day)  - datetime.date(year, month, day)
-    days_before = today - datetime.timedelta(days= 20)
     end_date = datetime.date.today()
+    user_input = input('''How many past days would you like to analyze? 
+(Example: 7 for last week, 30 for last month, 60 for last two months or date to choose any past days from today)\n''')
+    if user_input.isdigit():
+        start_date = end_date - datetime.timedelta(days= int(user_input))
+    elif user_input == "custom":
+        print("enter date: day/month/year\n ")
+        day, month, year = (map(int, input("-->").split("/")))
+        start_date = datetime.date(year, month, day)
+    else:
+        print(type(user_input))
+        return("missing input")
+    total_days = (start_date - end_date).days + 1    
     return (start_date, end_date, total_days)    
 
 
+""" How many past days would you like to analyze? 
+(Example: 7 for last week, 30 for last month, 60 for last two months) """
+
 def temp_trend():
-    
+    city = input("Enter your city : ")
     temp = []
     feels_like = []
     date_list = []
     
-    start_date, end_date, total_days = date()
+    try :
+        start_date, end_date, total_days = date()
+    except:
+        return("missing input")
     while start_date <= end_date:
-        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, "paris")
-        date_list.append(start_date.strftime('%d/%m'))
+        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, city)
+        date_list.append(start_date.strftime('%d/%b'))
         temp.append(kel_to_c(data["data"][0]["temp"]))
         feels_like.append(kel_to_c(data["data"][0]["feels_like"]))
         print(temp)
@@ -42,40 +53,52 @@ def temp_trend():
     plt.xlabel("date")
     plt.ylabel("Temperature")
     plt.plot(date_list,temp, marker="o", color = "r")
+    plt.xticks(rotation = 70)
+    
     # plt.plot(feels_like, marker='o', color = 'b')
     plt.show()   
     return(temp, feels_like)
 
 
 def humidity_trend():
+    city = input("Enter your city : ")
     humidity = []
     dates_list = []
     
-    start_date, end_date, total_days = date()
+    try :
+        start_date, end_date, total_days = date()
+    except:
+        return("missing input")
     while start_date <= (end_date):
-        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, "paris")
-        dates_list.append(start_date.strftime('%d/%m'))
+        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, city)
+        dates_list.append(start_date.strftime('%d/%b'))
         humidity.append(data["data"][0]["humidity"])
-        print(json.dumps(data, indent=2)) # --> gonna use to checks
+        #print(json.dumps(data, indent=2)) # --> gonna use to checks
+        print(humidity)
         start_date += datetime.timedelta(days=1)
     # humidity.reverse()
 
     # --> humidity graph
     plt.suptitle(f"Humidity of last {total_days} days")
     plt.xlabel("date")
-    plt.ylabel("Temperature")
+    plt.ylabel("humidity %")
     plt.plot(dates_list, humidity, marker="o", color = "g")
+    plt.xticks(rotation = 70)
     plt.show()
     return(humidity)
 
 
 def rain_trend():
+    city = input("Enter your city : ")
     rain = []
     date_list = []
-    start_date, end_date, total_days = date()
+    try:
+        start_date, end_date, total_days = date()
+    except:
+        return("missing input")
     while start_date <= end_date:
-        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, "paris")
-        date_list.append(start_date.strftime('%d/%m'))
+        data = fetch.fetch_24(start_date.year, start_date.month, start_date.day, city)
+        date_list.append(start_date.strftime('%d/%b'))
         rain_info = (data["data"][0].get("rain", 0))
         if rain_info!=0 : 
             quantity = (list(rain_info.values())[0]) 
@@ -93,10 +116,10 @@ def rain_trend():
     plt.xlabel("date")
     plt.ylabel("Rain in mm")
     plt.plot(date_list, rain, marker="o", color = "b")
+    plt.xticks(rotation = 70)
     plt.show()
     return (rain)    
     
-rain_trend()
 
 
 #--------------------------------------------------------#
