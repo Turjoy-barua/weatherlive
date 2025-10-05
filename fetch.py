@@ -11,7 +11,7 @@ api_key = 'c347ad0525998efbcb7008dd10e7d719'
 def lat_lon(location):
     user_input = location.lower()
     location_data = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={user_input}&limit={5}&appid={api_key}")
-    print(json.dumps(location_data.json()[0]["country"]))
+    #print(json.dumps(location_data.json()[0]["country"]))
     lat = location_data.json()[0]["lat"] 
     lon = location_data.json()[0]["lon"]
     country = location_data.json()[0]["country"]
@@ -25,14 +25,13 @@ def get_country_name(code):
         return code  
     
 def fetch_from_api(city):#location
-    exclude = "minutely, hourly, alerts, daily"
+    exclude = "minutely, hourly, alerts"
     units = "metric"
     lat, lon, country = lat_lon(city)
     weather_data = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&units{units}&exclude={exclude}&appid={api_key}") # todays weather
-    current_data = weather_data.json()["current"]#c_ -> current
-    formated = json.dumps(current_data, indent=2)
-    # print(formated) --> to use for test
-    return current_data , get_country_name(country) 
+    formated_current = weather_data.json()["current"]
+    
+    return formated_current, get_country_name(country) 
 
         
 def fetch_24(year, month, day, city):

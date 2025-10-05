@@ -17,7 +17,7 @@ def date():
         day, month, year = (map(int, input("-->").split("/")))
         start_date = datetime.date(year, month, day)
     else:
-        print(type(user_input))
+        #print(type(user_input))
         return("missing input")
     total_days = (start_date - end_date).days + 1    
     return (start_date, end_date, total_days)    
@@ -41,7 +41,7 @@ def temp_trend():
         date_list.append(start_date.strftime('%d/%b'))
         temp.append(kel_to_c(data["data"][0]["temp"]))
         feels_like.append(kel_to_c(data["data"][0]["feels_like"]))
-        print(temp)
+        #print(temp)
         #print(json.dumps(data, indent=2)) #--> gonna use to checks
         start_date += datetime.timedelta(days=1)
     
@@ -74,7 +74,7 @@ def humidity_trend():
         dates_list.append(start_date.strftime('%d/%b'))
         humidity.append(data["data"][0]["humidity"])
         #print(json.dumps(data, indent=2)) # --> gonna use to checks
-        print(humidity)
+        #print(humidity)
         start_date += datetime.timedelta(days=1)
     # humidity.reverse()
 
@@ -107,7 +107,7 @@ def rain_trend():
         else:
             rain.append(0)
         #print(json.dumps(data, indent=2)) # --> gonna use to checks
-        print(rain)
+        #print(rain)
         start_date += datetime.timedelta(days=1)
     #rain.reverse()
     
