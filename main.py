@@ -8,6 +8,39 @@ import visual
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
+def weather_emoji(comment):
+    comment = comment.lower()  # make case-insensitive
+
+    if comment in ["clear", "sunny"]:
+        return "☀️"
+    elif "few clouds" in comment:
+        return "🌤️"
+    elif "scattered clouds" in comment:
+        return "⛅"
+    elif "broken clouds" in comment or "overcast" in comment:
+        return "🌥️"
+    elif "cloud" in comment:
+        return "☁️"
+    elif "light rain" in comment or "drizzle" in comment:
+        return "🌦️"
+    elif "rain" in comment:
+        return "🌧️"
+    elif "thunderstorm" in comment:
+        return "⛈️"
+    elif "snow" in comment:
+        return "🌨️"
+    elif "mist" in comment or "haze" in comment or "fog" in comment:
+        return "🌫️"
+    elif "wind" in comment:
+        return "🌬️"
+    elif "tornado" in comment:
+        return "🌪️"
+    elif "hail" in comment:
+        return "🧊"
+    else:
+        return "☀️"
+        
+
 def user_interface():
     print('''========================================
         WEATHER ANALYZER - NSI
@@ -29,11 +62,12 @@ def current_weather(location):
     date = datetime.datetime.fromtimestamp(weather_data.get("dt")).strftime('%Y-%m-%d')
     sunrise = datetime.datetime.fromtimestamp(weather_data.get("sunrise")).strftime('%H:%M:%S')
     sunset = datetime.datetime.fromtimestamp(weather_data.get("sunset")).strftime('%H:%M:%S')
+    total_daytime = (datetime.datetime.strptime(sunset, "%H:%M:%S") - datetime.datetime.strptime(sunrise, '%H:%M:%S')).total_seconds()
     temp = kel_to_c(weather_data.get("temp"))
     fl = kel_to_c(weather_data.get("feels_like"))
     pressure = weather_data.get("pressure")
     humidity = weather_data.get("humidity")
-    dew_point = weather_data.get("dew_point")
+    dew_point = kel_to_c(weather_data.get("dew_point"))
     uvi = weather_data.get("uvi")
     clouds = weather_data.get("clouds")
     visibility = weather_data.get('visibility')
@@ -41,9 +75,10 @@ def current_weather(location):
     rain_mm = weather_data.get("rain", {}).get("1h", 0) 
     description = weather_data.get("weather", [{}])[0].get("description", "")
     
-    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
-    return(location.upper(), date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description)
     
+    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
+    print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
+    return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
 
 def graph():
     type_of_trend = (input("what graph you want? temp/humidity/rain\n")).lower()

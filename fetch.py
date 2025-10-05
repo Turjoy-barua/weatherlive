@@ -30,10 +30,11 @@ def fetch_from_api(city):#location
     lat, lon, country = lat_lon(city)
     weather_data = requests.get(f"https://api.openweathermap.org/data/3.0/onecall?lat={lat}&lon={lon}&units{units}&exclude={exclude}&appid={api_key}") # todays weather
     formated_current = weather_data.json()["current"]
-    
-    return formated_current, get_country_name(country) 
-
-        
+   
+    return formated_current, get_country_name(country)
+#print(fetch_from_api("dhaka"))
+#formated_current, country, weather = fetch_from_api("dhaka")
+#print(json.dumps(weather.json(), indent=2))        
 def fetch_24(year, month, day, city):
     time = int(datetime(year, month, day, tzinfo=timezone.utc).timestamp())
     lat, lon , country = lat_lon(city)

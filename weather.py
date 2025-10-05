@@ -1,11 +1,14 @@
 import streamlit as st
 import matplotlib as plt
 import main
+import visual
+import pandas as pd
+import time 
 st.title(":red[WEATHERLIVE APP]")
 page_element="""
 <style>
 .stApp {
-background-image: url("https://images.unsplash.com/photo-1743341942781-14f3c65603c4?q=80&w=5342&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+background-image: url("https://images.unsplash.com/photo-1477346611705-65d1883cee1e?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;
@@ -13,43 +16,91 @@ background-attachment: fixed;
 </style>
 """
 st.markdown(page_element, unsafe_allow_html=True)
-
-
-top_overview_cont = st.container(border=True)
+st.set_page_config(
+    # Title and icon for the browser's tab bar:
+    page_title="Seattle Weather",
+    page_icon="🌦️",
+    # Make the content take up the width of the page:
+    layout="wide",
+)
+left_part, right_part = st.columns(2)
+top_overview_cont = left_part.container(border=True)
 user_input = top_overview_cont.text_input("Enter the city")
 if user_input:
     city = user_input
 
-location, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description = main.current_weather('paris')
-    
+    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime = main.current_weather(city) #"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0
+        
+    # --> basic overview container
 
-today_comment = st.container(border=True)
-today_comment.write("todays weathe")
+    overview_cont = top_overview_cont.container(border=True, horizontal_alignment="center")
+    overview_cont.title("Current Weather",)
+    location_column, date_column = overview_cont.columns(2)
+    location_column.subheader(f'Location : {location}, {country}')
+    date_column.subheader(f'Date : {date}')
+    col1, col2 = overview_cont.columns(2)
+    col1.title(f" {main.weather_emoji(description)}    {temp} °C")
+    col1.subheader(f"{description.upper()}")
+
+    col2.write("")
+    feels_like_cont = col2.container(border=True)
+    feels_like_cont.markdown(f":green[**Feels like {fl} °C**]", width="stretch")
+    #col3.metric("Rain", f"{rain_mm} mm")
+
+    # --> details container 
+
+    details_cont = top_overview_cont.container(border=True)
+    details_cont.write("OVERVIEW")
+    details_cont_col1, details_cont_col2 = details_cont.columns(2)
+    details_cont_col1.metric("Rain", f"{rain_mm} mm")
+    details_cont_col1.metric("Uvi Index", uvi)
+    details_cont_col1.metric("wind", f"{wind_speed} km/h")
+    details_cont_col1.metric("Humidity", f"{humidity}%")
+    #details_cont_col1.metric(":red[SUNRISE]", sunrise)
+    #details_cont_col1.metric("SUNSET", sunset)
+
+    details_cont_col2.metric("dew Point", f"{dew_point} °C")
+    details_cont_col2.metric("Pressure", f"{pressure} mb")
+    details_cont_col2.metric("cloud cover", f"{clouds}%")
+    details_cont_col2.metric("visibility", visibility)
+
+    # --> sun container
+    sun_cont = top_overview_cont.container(border=True)
+    hours = int(total_daytime // 3600)
+    minutes = int((total_daytime % 3600) // 60)
+    seconds = int(total_daytime % 60)
+    sun_col1, sun_col2 = sun_cont.columns(2)
+    sun_col1.write("DAYTIME")
+    sun_col1.write("")
+    sun_col1.write("")
+    sun_col1.subheader(f"☀️  {hours}hrs {minutes}min {seconds}sec")
+    sun_col2.metric("Sunrise", sunrise)
+    sun_col2.metric("Sunset", sunset)
+    temp_graph = right_part.container(border=True)
+    humidity_graph = right_part.container(border=True)
+    rain_graph = right_part.container(border=True)
+    d = visual.trend(city)#{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+    df = pd.DataFrame(data=d)
+    total_days = len(df)
+    progress_text = "Operation in progress. Please wait."
+
+    temp_graph.line_chart(df, x='dates', y='temp')
+    humidity_graph.line_chart(df, x ="dates", y="humidity")
+    rain_graph.line_chart(df, x='dates', y='rain')
 
 
+    loading_bar = right_part.progress(0, text=progress_text)
 
-overview_cont = st.container(border=True, horizontal_alignment="center")
-overview_cont.title("Current Weather",)
-location_column, date_column = st.columns(2)
-location_column.header(f'Location : {location}')
-date_column.header(f'Date : {date}')
-col1, col2, col3 = st.columns(3)
-col1.metric("Temperature", f"{temp} °C")
-col1.write(f"\tFeels like{fl}")
-col2.metric("Humidity", f"{humidity} %")
-col3.metric("Rain", f"{rain_mm} mm")
+    for i in range(total_days):
+        time.sleep(0.1)
+        percentage = int((i + 1) / total_days * 100)
+        loading_bar.progress(percentage , text=progress_text)
+
+    loading_bar.empty()
+    loading_bar.success("done")
 
 
-
-details_cont = st.container(border=True)
-details_cont_col1, details_cont_col2 = st.columns(2)
-details_cont_col1.metric("SUNRISE", sunrise)
-details_cont.divider(width="stretch")
-details_cont_col1.metric("SUNSET", sunset)
-details_cont_col1.metric("Uvi Index", uvi)
-details_cont_col2.metric("")
-
-
-
+else:
+    st.write("search a city weather")
 
 
