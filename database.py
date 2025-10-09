@@ -1,5 +1,5 @@
 import sqlite3
-
+import pa
 
 def initializing():
     conn = sqlite3.connect("database.db")
@@ -20,11 +20,11 @@ def initializing():
     conn.commit()
     conn.close()
 
-def store_data(date, city, temp, feels_like, humidity, wind, rain):
+def store_data(location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime):
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO weather (date, city, temp, feels_like, humidity, wind, rain) VALUES (?, ?, ?, ?, ?, ?, ?)",
-               (date, city, temp, feels_like, humidity, wind, rain))
+    cursor.execute("INSERT INTO weather (location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime) VALUES (?, ?, ?, ?, ?, ?, ?)",
+               (location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime))
     conn.commit()
     conn.close()
     print("Data successfully saved to database ✅")
@@ -37,3 +37,9 @@ def read_data():
     conn.commit()
     conn.close()
     return (data)
+
+print(read_data())
+def data_frame():
+    df = pd
+    
+    pass
