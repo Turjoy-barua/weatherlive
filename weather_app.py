@@ -1,5 +1,4 @@
 import streamlit as st
-import matplotlib as plt
 import main
 import graph_values
 import pandas as pd
@@ -25,10 +24,10 @@ st.set_page_config(
 left_part, right_part = st.columns(2)
 right_upper_part = right_part.container()
 right_left_column,right_right_column = right_upper_part.columns(2)
-right_right_column.subheader(f"time : {time.strftime('%H:%M:%S')}")
+#right_right_column.subheader(f"time : {time.strftime('%H:%M:%S')}")
 top_overview_cont = left_part.container(border=True)
 user_input = top_overview_cont.text_input("Enter the city")
-top_overview_cont.subheader("time")
+#top_overview_cont.subheader("time")
 if user_input:
     city = user_input
 
@@ -85,7 +84,7 @@ if user_input:
     temp_graph = right_part.container(border=True)
     humidity_graph = right_part.container(border=True)
     rain_graph = right_part.container(border=True)
-    d = {'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+    d = graph_values.trend(user_input)#{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
     df = pd.DataFrame(data=d)
     total_days = len(df)
     progress_text = "Operation in progress. Please wait."
