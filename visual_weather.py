@@ -13,19 +13,16 @@ total_days = len(df)
 
 progress_text = "Operation in progress. Please wait."
 
-# Show the charts
 st.line_chart(df[['dates', 'temp']].set_index('dates'))
 st.line_chart(df[['dates', 'humidity']].set_index('dates'))
 st.line_chart(df[['dates', 'rain']].set_index('dates'))
 
-# Create a single progress bar
 my_bar = st.progress(0, text=progress_text)
 
-# Update progress
 for i in range(total_days):
-    time.sleep(0.1)  # simulate computation
-    percent_complete = int((i + 1) / total_days * 100)  # convert to 0-100
+    time.sleep(0.1)  
+    percent_complete = int((i + 1) / total_days * 100)  
     my_bar.progress(percent_complete, text=progress_text)
 
-my_bar.empty()  # remove bar when done
+my_bar.empty()  
 st.success("Done!")

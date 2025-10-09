@@ -3,7 +3,7 @@ import datetime
 #import time
 import os 
 import database
-import visual
+import graph_values
 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
@@ -83,11 +83,11 @@ def current_weather(location):
 def graph():
     type_of_trend = (input("what graph you want? temp/humidity/rain\n")).lower()
     if type_of_trend == "temp":
-        (visual.temp_trend())
+        (graph_values.temp_trend())
     elif type_of_trend == "humidity":
-        (visual.humidity_trend())
+        (graph_values.humidity_trend())
     elif type_of_trend == "rain":
-        (visual.rain_trend())
+        (graph_values.rain_trend())
         
         
 """ #whole running function for the whole systeme

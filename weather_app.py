@@ -1,7 +1,7 @@
 import streamlit as st
 import matplotlib as plt
 import main
-import visual
+import graph_values
 import pandas as pd
 import time 
 st.title(":red[WEATHERLIVE APP]")
@@ -17,19 +17,22 @@ background-attachment: fixed;
 """
 st.markdown(page_element, unsafe_allow_html=True)
 st.set_page_config(
-    # Title and icon for the browser's tab bar:
-    page_title="Seattle Weather",
+    page_title="weatherlive",
     page_icon="🌦️",
-    # Make the content take up the width of the page:
     layout="wide",
 )
+
 left_part, right_part = st.columns(2)
+right_upper_part = right_part.container()
+right_left_column,right_right_column = right_upper_part.columns(2)
+right_right_column.subheader(f"time : {time.strftime('%H:%M:%S')}")
 top_overview_cont = left_part.container(border=True)
 user_input = top_overview_cont.text_input("Enter the city")
+top_overview_cont.subheader("time")
 if user_input:
     city = user_input
 
-    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime = main.current_weather(city) #"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0
+    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime = main.current_weather(user_input)#"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0
         
     # --> basic overview container
 
@@ -76,10 +79,13 @@ if user_input:
     sun_col1.subheader(f"☀️  {hours}hrs {minutes}min {seconds}sec")
     sun_col2.metric("Sunrise", sunrise)
     sun_col2.metric("Sunset", sunset)
+    
+ 
+    right_part.subheader("Graph of last 20 days")
     temp_graph = right_part.container(border=True)
     humidity_graph = right_part.container(border=True)
     rain_graph = right_part.container(border=True)
-    d = visual.trend(city)#{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+    d = {'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
     df = pd.DataFrame(data=d)
     total_days = len(df)
     progress_text = "Operation in progress. Please wait."
@@ -87,8 +93,7 @@ if user_input:
     temp_graph.line_chart(df, x='dates', y='temp')
     humidity_graph.line_chart(df, x ="dates", y="humidity")
     rain_graph.line_chart(df, x='dates', y='rain')
-
-
+    
     loading_bar = right_part.progress(0, text=progress_text)
 
     for i in range(total_days):
@@ -98,7 +103,6 @@ if user_input:
 
     loading_bar.empty()
     loading_bar.success("done")
-
 
 else:
     st.write("search a city weather")
