@@ -7,3 +7,4 @@ import pycountry
 import fetch
 import matplotlib
 import streamlit
+import pip
