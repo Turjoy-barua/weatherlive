@@ -1,4 +1,7 @@
-import streamlit as st
+
+
+
+""" import streamlit as st
 import pandas as pd
 import time
 
@@ -25,4 +28,4 @@ for i in range(total_days):
     my_bar.progress(percent_complete, text=progress_text)
 
 my_bar.empty()  
-st.success("Done!")
+st.success("Done!") """

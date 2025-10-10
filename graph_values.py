@@ -58,7 +58,7 @@ def trend(city):
     print(data_frame)
     return(data_frame)
 
-
+""" 
 def humidity_trend():
     city = "paris"#input("Enter your city : ")
     humidity = []
@@ -77,12 +77,12 @@ def humidity_trend():
         start_date += datetime.timedelta(days=1)
     # humidity.reverse()
     # --> humidity graph
-    """ plt.suptitle(f"Humidity of last {total_days} days")
+    plt.suptitle(f"Humidity of last {total_days} days")
     plt.xlabel("date")
     plt.ylabel("humidity %")
     plt.plot(dates_list, humidity, marker="o", color = "g")
     plt.xticks(rotation = 70)
-    plt.show() """
+    plt.show() 
     return(humidity)
 
 
@@ -116,7 +116,7 @@ def rain_trend():
     plt.plot(date_list, rain, marker="o", color = "b")
     plt.xticks(rotation = 70)
     plt.show()
-    return (rain)    
+    return (rain)     """
     
 
 
