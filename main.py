@@ -40,17 +40,6 @@ def weather_emoji(comment):
     else:
         return "☀️"
         
-
-def user_interface():
-    print('''========================================
-        WEATHER ANALYZER - NSI
-========================================
-1. Current weather of a city  -> current
-2. View saved weather history -> history
-3. Analyze weather trends     -> trend 
-4. Exit                       -> exit
-''') # --> should erase the 3rd option
-
 def history():
     data =  database.read_data()
     for row in data:
@@ -76,19 +65,11 @@ def current_weather(location):
     description = weather_data.get("weather", [{}])[0].get("description", "")
     
     
-    database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
+    #database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
     print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
     return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
 
-def graph():
-    type_of_trend = (input("what graph you want? temp/humidity/rain\n")).lower()
-    if type_of_trend == "temp":
-        (graph_values.temp_trend())
-    elif type_of_trend == "humidity":
-        (graph_values.humidity_trend())
-    elif type_of_trend == "rain":
-        (graph_values.rain_trend())
-        
+
         
 """ #whole running function for the whole systeme
 running = True

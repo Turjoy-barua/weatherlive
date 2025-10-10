@@ -1,5 +1,5 @@
 import sqlite3
-import pa
+import pandas as pd
 
 def initializing():
     conn = sqlite3.connect("database.db")
@@ -38,8 +38,5 @@ def read_data():
     conn.close()
     return (data)
 
-print(read_data())
 def data_frame():
-    df = pd
-    
     pass
