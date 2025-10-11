@@ -3,6 +3,9 @@ import main
 import graph_values
 import pandas as pd
 import time 
+import datetime
+
+
 st.title(":red[WEATHERLIVE APP]")
 page_element="""
 <style>
@@ -22,31 +25,39 @@ st.set_page_config(
 )
 
 left_part, right_part = st.columns(2)
-right_upper_part = right_part.container()
-right_left_column,right_right_column = right_upper_part.columns(2)
-#right_right_column.subheader(f"time : {time.strftime('%H:%M:%S')}")
 top_overview_cont = left_part.container(border=True)
 user_input = top_overview_cont.text_input("Enter the city")
-#top_overview_cont.subheader("time")
+
+""" """
+
+
 if user_input:
     city = user_input
 
-    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime = main.current_weather(user_input)#"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0
+    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime, current_time_loc =main.current_weather(user_input) #"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0 , 0
         
     # --> basic overview container
 
     overview_cont = top_overview_cont.container(border=True, horizontal_alignment="center")
     overview_cont.title("Current Weather",)
-    location_column, date_column = overview_cont.columns(2)
+    location_column, date_time_column = overview_cont.columns(2)
     location_column.subheader(f'Location : {location}, {country}')
-    date_column.subheader(f'Date : {date}')
+    date_col, time_col = date_time_column.columns(2)
+    date_col.subheader(f'Date : {date}')
+    time_col.write("")
+    time_col.write(f"**Current time in location: {current_time_loc}**")
+
     col1, col2 = overview_cont.columns(2)
+    
     col1.title(f" {main.weather_emoji(description)}    {temp} °C")
     col1.subheader(f"{description.upper()}")
 
     col2.write("")
     feels_like_cont = col2.container(border=True)
     feels_like_cont.markdown(f":green[**Feels like {fl} °C**]", width="stretch")
+     
+       
+    
     #col3.metric("Rain", f"{rain_mm} mm")
 
     # --> details container 
@@ -64,7 +75,7 @@ if user_input:
     details_cont_col2.metric("dew Point", f"{dew_point} °C")
     details_cont_col2.metric("Pressure", f"{pressure} mb")
     details_cont_col2.metric("cloud cover", f"{clouds}%")
-    details_cont_col2.metric("visibility", visibility)
+    details_cont_col2.metric("visibility", f"{visibility} km")
 
     # --> sun container
     sun_cont = top_overview_cont.container(border=True)
@@ -79,12 +90,12 @@ if user_input:
     sun_col2.metric("Sunrise", sunrise)
     sun_col2.metric("Sunset", sunset)
     
- 
-    right_part.subheader("Graph of last 20 days")
-    temp_graph = right_part.container(border=True)
-    humidity_graph = right_part.container(border=True)
-    rain_graph = right_part.container(border=True) #graph_values.trend(user_input)
-    d = {'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+    right_upper_part = right_part.container(border=True)
+    right_upper_part.subheader("Graph of last 20 days")
+    temp_graph = right_upper_part.container(border=True)
+    humidity_graph = right_upper_part.container(border=True)
+    rain_graph = right_upper_part.container(border=True) #graph_values.trend(user_input)
+    d = graph_values.trend(user_input) # {'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
     df = pd.DataFrame(data=d)
     total_days = len(df)
     progress_text = "Operation in progress. Please wait."
@@ -92,16 +103,6 @@ if user_input:
     temp_graph.line_chart(df, x='dates', y='temp')
     humidity_graph.line_chart(df, x ="dates", y="humidity")
     rain_graph.line_chart(df, x='dates', y='rain')
-    
-    loading_bar = right_part.progress(0, text=progress_text)
-
-    for i in range(total_days):
-        time.sleep(0.1)
-        percentage = int((i + 1) / total_days * 100)
-        loading_bar.progress(percentage , text=progress_text)
-
-    loading_bar.empty()
-    loading_bar.success("done")
 
 else:
     st.write("search a city weather")

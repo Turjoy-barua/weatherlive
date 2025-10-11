@@ -47,10 +47,10 @@ def history():
     return 
 
 def current_weather(location):
-    weather_data, country = fetch.fetch_from_api(location)
-    date = datetime.datetime.fromtimestamp(weather_data.get("dt")).strftime('%Y-%m-%d')
-    sunrise = datetime.datetime.fromtimestamp(weather_data.get("sunrise")).strftime('%H:%M:%S')
-    sunset = datetime.datetime.fromtimestamp(weather_data.get("sunset")).strftime('%H:%M:%S')
+    weather_data, country, timez = fetch.fetch_from_api(location)
+    date = datetime.datetime.fromtimestamp(weather_data.get("dt"), tz=timez).strftime('%Y-%m-%d')
+    sunrise = datetime.datetime.fromtimestamp(weather_data.get("sunrise"), tz=timez).strftime('%H:%M:%S')
+    sunset = datetime.datetime.fromtimestamp(weather_data.get("sunset"), tz=timez).strftime('%H:%M:%S')
     total_daytime = (datetime.datetime.strptime(sunset, "%H:%M:%S") - datetime.datetime.strptime(sunrise, '%H:%M:%S')).total_seconds()
     temp = kel_to_c(weather_data.get("temp"))
     fl = kel_to_c(weather_data.get("feels_like"))
@@ -59,51 +59,13 @@ def current_weather(location):
     dew_point = kel_to_c(weather_data.get("dew_point"))
     uvi = weather_data.get("uvi")
     clouds = weather_data.get("clouds")
-    visibility = weather_data.get('visibility')
+    visibility = weather_data.get('visibility')/1000
     wind_speed = weather_data.get("wind_speed")
     rain_mm = weather_data.get("rain", {}).get("1h", 0) 
     description = weather_data.get("weather", [{}])[0].get("description", "")
-    
+    current_time_loc = datetime.datetime.now(tz=timez).strftime("%H:%M")
     
     #database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
-    print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
-    return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
-
-
-        
-""" #whole running function for the whole systeme
-running = True
-#user_interface()
-while running:
-    user = (input("--> "))
-    os.system('cls' if os.name == 'nt' else 'clear') # this function is used to clear the screen of the terminal
-    print(user)
-    if user == "help":
-        user_interface()
-    elif user == "exit":
-        running = False
-    elif user == "current":
-        current_weather()
-    elif user == "history":
-        history()
-    elif user == "trend":
-        graph() 
-        
-        
-            print("===============================")
-    print("   Current Weather Report")
-    print("===============================\n")    
-    print(f"📍 Location: {location.upper()}, {country}")
-    print(f"📅 Date: {date}\n")
-    print(f"🌡️ Temperature : {temp} °C")
-    print(f"🌡️ Feels like : {fl} °C")
-    print(f"💧 Humidity    : {humidity} %")
-    print(f"🌬️ Wind Speed  : {wind_speed} km/h")
-    print(f"🌧️ Rain        : {rain_mm} mm\n")
-
-        
-        
-        
-        
-        
-        """
+    
+    print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
+    return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
