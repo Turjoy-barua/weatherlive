@@ -1,6 +1,5 @@
 import fetch
 import datetime
-#import time
 import os 
 import database
 import graph_values
