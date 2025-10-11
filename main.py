@@ -67,5 +67,5 @@ def current_weather(location):
     
     #database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
     
-    print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
+    #print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
     return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)

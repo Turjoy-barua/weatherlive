@@ -28,13 +28,12 @@ left_part, right_part = st.columns(2)
 top_overview_cont = left_part.container(border=True)
 user_input = top_overview_cont.text_input("Enter the city")
 
-""" """
 
 
 if user_input:
     city = user_input
 
-    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime, current_time_loc =main.current_weather(user_input) #"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0 , 0
+    location, country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm , description , total_daytime, current_time_loc = main.current_weather(user_input) #"paris", "france", "11/10/2025", '07:55:57', '19:22:02', 15.2 , 14.5, 1021, 69, 9.5, 0.32, 40, 100000, 9.26, 0, 'SCATTERED CLOUDS', 0 , 0
         
     # --> basic overview container
 
