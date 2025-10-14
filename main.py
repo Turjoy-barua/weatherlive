@@ -6,7 +6,7 @@ def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
 def weather_emoji(comment):
-    comment = comment.lower()  # make case-insensitive
+    comment = comment.lower()  
 
     if comment in ["clear", "sunny"]:
         return "☀️"

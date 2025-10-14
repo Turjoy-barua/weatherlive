@@ -1,5 +1,4 @@
 import sqlite3
-import pandas as pd
 
 def initializing():
     conn = sqlite3.connect("database.db")

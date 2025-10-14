@@ -13,8 +13,7 @@ def date(): # ---> used to solve the problem with days counting
         start_date = end_date - datetime.timedelta(days= int(user_input))
     else:
         return("missing input")
-    total_days = (start_date - end_date).days + 1    
-    return (start_date, end_date, total_days)    
+    return (start_date, end_date)    
 
 
 
@@ -26,7 +25,7 @@ def trend(city):
     humidity = []
     rain = []
     try :
-        start_date, end_date, total_days = date()
+        start_date, end_date = date()
     except:
         return("missing input")
     while start_date <= end_date:
