@@ -1,30 +1,23 @@
 import fetch
 import datetime 
-import matplotlib.pyplot as plt
 import json
 import pandas as pd
+
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
-def date():
+def date(): # ---> used to solve the problem with days counting
     end_date = datetime.date.today()
-    user_input = "20" #input('''How many past days would you like to analyze? 
-#(Example: 7 for last week, 30 for last month, 60 for last two months or date to choose any past days from today)\n''')
+    user_input = "20" # ---> last 20 days from today
     if user_input.isdigit():
         start_date = end_date - datetime.timedelta(days= int(user_input))
-    elif user_input == "custom":
-        print("enter date: day/month/year\n ")
-        day, month, year = (map(int, input("-->").split("/")))
-        start_date = datetime.date(year, month, day)
     else:
-        #print(type(user_input))
         return("missing input")
     total_days = (start_date - end_date).days + 1    
     return (start_date, end_date, total_days)    
 
 
-""" How many past days would you like to analyze? 
-(Example: 7 for last week, 30 for last month, 60 for last two months) """
+
 
 def trend(city):
     temp = []

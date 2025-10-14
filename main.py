@@ -1,8 +1,6 @@
 import fetch
 import datetime
-import os 
 import database
-import graph_values
 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
