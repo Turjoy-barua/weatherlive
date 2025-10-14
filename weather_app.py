@@ -38,7 +38,7 @@ if user_input:
         location_column, date_time_column = overview_cont.columns(2)
         location_column.subheader(f'Location : {location}, {country}')
         date_col, time_col = date_time_column.columns(2)
-        date_col.subheader(f'Date : {date}')
+        date_col.write(f'**Date : {date}**')
         time_col.write("")
         time_col.write(f"**Current time in location: {current_time_loc}**")
 
