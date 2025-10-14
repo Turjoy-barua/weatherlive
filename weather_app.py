@@ -1,7 +1,7 @@
 import streamlit as st
 import main
 import pandas as pd
-
+import graph_values
 
 st.title(":red[WEATHERLIVE APP]")
 page_element="""
@@ -81,11 +81,11 @@ if user_input:
         
         # --> graph container
         right_upper_part = right_part.container(border=True)
-        right_upper_part.subheader("Graph of last 20 days")
+        right_upper_part.subheader("Graph of last 20 days (avg)")
         temp_graph = right_upper_part.container(border=True)
         humidity_graph = right_upper_part.container(border=True)
-        rain_graph = right_upper_part.container(border=True) #graph_values.trend(user_input)
-        d = {'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+        rain_graph = right_upper_part.container(border=True) 
+        d = graph_values.trend(user_input) #{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
         df = pd.DataFrame(data=d)
         total_days = len(df)
         progress_text = "Operation in progress. Please wait."

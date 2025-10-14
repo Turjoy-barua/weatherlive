@@ -62,7 +62,8 @@ def current_weather(location):
     description = weather_data.get("weather", [{}])[0].get("description", "")
     current_time_loc = datetime.datetime.now(tz=timez).strftime("%H:%M")
     
-    #database.store_data(date, location.upper(), temp, fl, humidity, wind_speed, rain_mm)
-    
-    #print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
+    #database.store_data_supabase(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
+    database.store_data_local(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime)
+
+    print(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)
     return(location.upper(), country, date, sunrise, sunset, temp, fl, pressure, humidity, dew_point, uvi, clouds, visibility, wind_speed, rain_mm, description, total_daytime, current_time_loc)

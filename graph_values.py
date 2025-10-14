@@ -8,11 +8,7 @@ def kel_to_c(kelvin):
 
 def date(): # ---> used to solve the problem with days counting
     end_date = datetime.date.today()
-    user_input = "20" # ---> last 20 days from today
-    if user_input.isdigit():
-        start_date = end_date - datetime.timedelta(days= int(user_input))
-    else:
-        return("missing input")
+    start_date = end_date - datetime.timedelta(days= int(20))
     return (start_date, end_date)    
 
 
