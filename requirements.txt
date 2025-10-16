@@ -1,5 +1,5 @@
 protobuf~=3.19.0
-altair
+
 annotated-types
 anyio
 appnope
