@@ -1,6 +1,7 @@
 import fetch
 import datetime
 import database
+from timezonefinder import TimezoneFinder as tzf
 
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))

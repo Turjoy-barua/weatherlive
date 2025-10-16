@@ -2,6 +2,7 @@ import streamlit as st
 import main
 import pandas as pd
 import graph_values
+from timezonefinder import TimezoneFinder as tzf
 
 st.title(":red[WEATHERLIVE APP]")
 page_element="""
@@ -81,19 +82,27 @@ if user_input:
         
         # --> graph container
         right_upper_part = right_part.container(border=True)
-        right_upper_part.subheader("Graph of last 20 days (avg)")
-        temp_graph = right_upper_part.container(border=True)
-        humidity_graph = right_upper_part.container(border=True)
-        rain_graph = right_upper_part.container(border=True) 
-        d = graph_values.trend(user_input) #{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
-        df = pd.DataFrame(data=d)
-        total_days = len(df)
-        progress_text = "Operation in progress. Please wait."
-
-        temp_graph.line_chart(df, x='dates', y='temp')
-        humidity_graph.line_chart(df, x ="dates", y="humidity")
-        rain_graph.line_chart(df, x='dates', y='rain')
         
+        total_days = right_upper_part.number_input("Insert total days of graph", min_value=7, max_value=30)
+        if total_days:
+            
+            right_upper_part.subheader(f"Currently showing Graph of last {total_days} days (avg)")
+            
+            temp_graph = right_upper_part.container(border=True)
+            humidity_graph = right_upper_part.container(border=True)
+            rain_graph = right_upper_part.container(border=True) 
+            d = graph_values.trend(user_input, total_days) #{'dates': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 'temp': [10, 20, 30, 20, 40, 50, 60, 70, 80, 80], 'humidity': [10, 20, 30, 40, 50, 60, 70, 80, 90, 80], 'rain': [10, 20, 2, 30, 40, 50, 60, 70, 80, 80]}
+            df = pd.DataFrame(data=d)
+            df_reversed = df.iloc[::-1]
+            total_days = len(df_reversed)
+            progress_text = "Operation in progress. Please wait."
+
+            temp_graph.line_chart(df_reversed, x='dates', y='temp')
+            humidity_graph.line_chart(df_reversed, x ="dates", y="humidity")
+            rain_graph.line_chart(df_reversed, x='dates', y='rain')
+        else:
+            right_upper_part.subheader("enter total days of the graph you want to see")
+            
     except Exception as error: # --> if the api returns an error cause of wrong input or whatever
         st.title("Can't find the city")
 else:

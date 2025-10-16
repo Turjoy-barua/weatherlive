@@ -6,22 +6,22 @@ import pandas as pd
 def kel_to_c(kelvin):
     return (round(kelvin - 273.15, 1))
 
-def date(): # ---> used to solve the problem with days counting
+def date(total_days): # ---> used to solve the problem with days counting
     end_date = datetime.date.today()
-    start_date = end_date - datetime.timedelta(days= int(20))
+    start_date = end_date - datetime.timedelta(days= int(total_days))
     return (start_date, end_date)    
 
 
 
 
-def trend(city):
+def trend(city, total_days):
     temp = []
     feels_like = []
     date_list = []
     humidity = []
     rain = []
     try :
-        start_date, end_date = date()
+        start_date, end_date = date(total_days)
     except:
         return("missing input")
     while start_date <= end_date:
